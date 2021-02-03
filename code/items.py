@@ -12,16 +12,9 @@ class Item(Resource):
 
     @jwt_required()
     def get(self, name):
-        connection = sqlite3.connect('mydata.db')
-        curser = connection.cursor()
-        
-        select_query = "SELECT * FROM items WHERE name = ?"
-        result = curser.execute(select_query, (name,))
-        row = result.fetchone()
-        connection.close()
-
+        row = self.find_by_name(name)
         if row:
-            return {'items': row}, 201 if item else 404
+            return {'items': {"name": row[0], 'price': row[1]}}, 201 if row else 404
         return {'message': 'item not found'}, 400
 
     def post(self,name):
@@ -34,21 +27,38 @@ class Item(Resource):
         return item, 201
     
     def delete(self, name):
-        global items
-        items = list(filter(lambda x: x['name'] != name, items))
-        return {'message': 'item deleted'}
+        connection = sqlite3.connect('mydata.db')
+        curser = connection.cursor()
+        print(name)
+        if self.find_by_name(name):
+            delete_query = "DELETE FROM items WHERE name = ?"
+            curser.execute(delete_query,(name,))
+            connection.commit()
+            connection.close()
+            return {'message': 'item deleted'}
+        return {'message': 'item could not delete'}
     
     def put(self, name):
         data = Item.parser.parse_args()
-        
+    
         connection = sqlite3.connect('mydata.db')
         curser = connection.cursor()
         
         insert_query = "INSERT INTO items VALUES (?,?)"
-        curser.execute(insert_query,(data['name'],data['price'])))
+        curser.execute(insert_query,(name,data['price']))
         connection.commit()
         connection.close()
         return {'message': 'item created successfully!'}, 201 
+
+    def find_by_name(self, name):
+        connection = sqlite3.connect('mydata.db')
+        curser = connection.cursor()
+        
+        select_query = "SELECT * FROM items WHERE name = ?"
+        result = curser.execute(select_query, (name,))
+        row = result.fetchone()
+        connection.close()
+        return row
 
 
 

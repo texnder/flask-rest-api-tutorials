@@ -15,7 +15,7 @@ class User:
         select_query = "SELECT * FROM users WHERE username = ?"
         result = curser.execute(select_query, (username,))
         row = result.fetchone()
-        print(row)
+       
         if row:
             # user = User(row[0], row[1], row[2])
             user = cls(*row)
@@ -51,7 +51,6 @@ class UserRegister(Resource):
         help= 'this field cannot be blank'
     )
 
-    parser = reqparse.RequestParser()
     parser.add_argument('password', 
         type= str, 
         required= True, 
