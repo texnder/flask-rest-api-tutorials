@@ -95,5 +95,16 @@ it respond with resources. rest api is stateless..
 # setup virtual environment for python 3.5+
 python -m venv drive:/path/to/directory
 ## for window
-- ./venv/Scripts/activate.bat   
+- ./venv/Scripts/activate.bat 
+
+# Heroku?
+
+ans- herku is kind of hosting service it makes available to anybody to interact with your app.
+    it provide link for you. it works with dyno which works on virualization..it reads from github..
+    so must be deploy first on github
+
+Conclusion :
+    -A distributed hosting service 
+    -Each server is called a "dyno", and it runs your application
+    -Free tier gives you 1 dyno, but limited running hours
 """

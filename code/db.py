@@ -1,0 +1,3 @@
+# defined here saparately so that we can use it from anywhere...
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
